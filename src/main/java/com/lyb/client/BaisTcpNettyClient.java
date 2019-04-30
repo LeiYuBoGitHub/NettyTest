@@ -61,14 +61,14 @@ public class BaisTcpNettyClient {
             int index = 0;
             int head = BaisConstant.HEAD_DATA;
             byte[] r = new byte[5];
-            r[index] = (byte)head;
+            r[index++] = (byte)head;
+            r[index++] = (byte)3;
             r[index++] = (byte)5;
-            r[index++] = 5;
-            r[index++] = 2;
-            r[index++] = 1;
+            r[index++] = (byte)2;
+            r[index++] = (byte)1;
             while (true){
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1);
 
                     ByteBuf pingMessage = Unpooled.buffer();
                     ByteBuf buf = pingMessage.writeBytes(r);
