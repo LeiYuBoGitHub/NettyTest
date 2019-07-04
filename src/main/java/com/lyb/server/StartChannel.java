@@ -26,8 +26,8 @@ public class StartChannel {
             ChannelFuture f = bootstrap.bind(BaisConstant.PORT).sync();
 
             if (f.isSuccess()) {
-                System.out.println("启动Netty服务成功，端口号：" + BaisConstant.PORT);
-                logger.info("启动Netty服务成功，端口号：" + BaisConstant.PORT);
+                System.out.println("启动Netty服务成功,端口号:" + BaisConstant.PORT);
+                logger.info("启动Netty服务成功,端口号:" + BaisConstant.PORT);
             }
 
             // 关闭连接
@@ -37,7 +37,6 @@ public class StartChannel {
             e.printStackTrace();
         }finally {
             logger.info("优雅退出,释放线程池资源");
-            group.shutdownGracefully();
             group.shutdownGracefully();
         }
 

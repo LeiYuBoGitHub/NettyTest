@@ -1,6 +1,6 @@
-package com.lyb.config;
+package com.lyb.server;
 
-import com.lyb.server.handler.TcpNettyServerHandler;
+import com.lyb.decoder.SmartCarDecoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 
@@ -14,10 +14,12 @@ public class ServerChannelHandler extends ChannelInitializer<SocketChannel> {
 
     protected void initChannel(SocketChannel sc) {
         //添加自动以协议的编解码工具
-        sc.pipeline().addLast(new SmartCarEncoder());
+        //sc.pipeline().addLast(new SmartCarEncoder());
+
+        //解码器
         sc.pipeline().addLast(new SmartCarDecoder());
 
         //处理网络IO
-        sc.pipeline().addLast(new TcpNettyServerHandler());
+        sc.pipeline().addLast(new NettyServerHandler());
     }
 }
