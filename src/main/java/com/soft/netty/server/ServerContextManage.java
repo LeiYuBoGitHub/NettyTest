@@ -1,12 +1,14 @@
 package com.soft.netty.server;
 
 import com.soft.netty.common.ConnectInfo;
+import com.soft.netty.common.util.ByteUtil;
 import com.soft.netty.common.util.StringUtil;
+import com.soft.netty.entity.FrameType;
 import com.soft.netty.entity.frame.DecoderByteFrame;
+import com.soft.netty.entity.frame.EncoderByteFrame;
 import com.soft.netty.server.replay.ServerRegisterReply;
 import com.soft.netty.server.report.ServerRegisterReport;
 import com.soft.netty.common.config.Constant;
-import com.soft.netty.server.request.ServerRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
@@ -43,7 +45,7 @@ public class ServerContextManage {
         ServerRegisterReply reply = new ServerRegisterReply();
         reply.setAccountLength(model.getAccountLength());
         reply.setAccount(model.getAccount());
-        return ServerRequest.registerReply(reply.cover());
+        return request(reply.cover(), FrameType.REGISTER_REPLY);
     }
 
     /**
@@ -51,7 +53,7 @@ public class ServerContextManage {
      * @return {@link byte[]}
      */
     static byte[] heartbeatReport() {
-        return ServerRequest.heartbeatReply();
+        return request(new byte[0], FrameType.HEARTBEAT_REPLY);
     }
 
     /**
@@ -62,10 +64,10 @@ public class ServerContextManage {
         if (StringUtil.isBlank(key)) {
             return false;
         }
-        boolean flag = nettyClose(ctx);
-        if (!flag) {
-            return false;
-        }
+        String linkId = ctx.channel().id().toString();
+        logger.info("[准备关闭连接] / 连接ID:" + linkId);
+        ctx.channel().close();
+        logger.info("[连接已关闭] / 连接ID:" + linkId);
         // 删除内存
         Constant.serverConnectInfoMap.remove(key);
         return true;
@@ -80,16 +82,14 @@ public class ServerContextManage {
         return null;
     }
 
-    private static boolean nettyClose(ChannelHandlerContext ctx) {
-        String linkId = ctx.channel().id().toString();
-        logger.info("[准备关闭连接] / 连接ID:" + linkId);
-        ctx.channel().close();
-        boolean flag = ctx.channel().isActive();
-        if (!flag) {
-            logger.info("[连接已关闭] / 连接ID:" + linkId);
-            return true;
-        }
-        logger.error("[连接关闭失败] / 连接ID:" + linkId);
-        return false;
+    /**
+     * 请求
+     * @param data      数据
+     * @param frameType 框架式
+     * @return 结果
+     */
+    public static byte[] request(byte[] data, FrameType frameType) {
+        logger.info("业务字节长度:" + data.length + " / 业务字节16进制:[" + ByteUtil.byteArrayToString(data) + "]");
+        return EncoderByteFrame.encoder(frameType, data);
     }
 }

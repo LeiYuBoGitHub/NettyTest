@@ -27,7 +27,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             DecoderByteFrame decoderByteFrame = (DecoderByteFrame) msg;
             FrameType frameType = FrameType.getFrameType(decoderByteFrame.getMessageType());
             if (frameType == null) {
-                logger.error("未知命令");
+                logger.info("★★★★★★★★★★[未找到命令类型]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                 return;
             }
             try {
@@ -35,25 +35,21 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] data = new byte[0];
                 switch (frameType) {
                     case REGISTER_REPORT -> {
-                        logger.info("★★★★★★★★★★收到[注册]消息★★★★★★★★★★");
-                        logger.info("[注册]" + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
-                        logger.info("数据:" + ByteUtil.byteArrayToString(decoderByteFrame.getData()));
+                        logger.info("★★★★★★★★★★[注册消息]★★★★★★★★★★" + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         data = ServerContextManage.registerReport(decoderByteFrame, ctx);
+                        logger.info("★★★★★★★★★★[注册消息服务器回复]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]" + " / 回复数据长度:" + data.length + " / 回复数据长度:" + ByteUtil.byteArrayToString(data));
                     }
                     case HEARTBEAT_REPORT -> {
-                        logger.info("★★★★★★★★★★收到[心跳]消息★★★★★★★★★★");
-                        logger.info("[心跳] / 账户: "+ ServerContextManage.getConnectInfoKey(ctx) +" / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
-                        logger.info("数据:" + ByteUtil.byteArrayToString(decoderByteFrame.getData()));
+                        logger.info("★★★★★★★★★★[心跳消息]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         data = ServerContextManage.heartbeatReport();
+                        logger.info("★★★★★★★★★★[心跳消息服务器回复]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]" + " / 回复数据长度:" + data.length + " / 回复数据长度:" + ByteUtil.byteArrayToString(data));
                     }
                     default -> {
-                        logger.info("未知类型数据");
+                        logger.info("★★★★★★★★★★[未知类型数据]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         flag = false;
                     }
                 }
                 if (flag) {
-                    logger.info("服务器响应长度:" + data.length);
-                    logger.info("服务器响应字节字符串:" + ByteUtil.byteArrayToString(data));
                     ctx.writeAndFlush(Unpooled.wrappedBuffer(data));
                 }
             } catch (Exception e) {
