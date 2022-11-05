@@ -42,7 +42,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         logger.info("★★★★★★★★★★[注册消息]★★★★★★★★★★"
                                 + " / 连接地址:" + ctx.channel().remoteAddress()
                                 + " / 连接ID:" + ctx.channel().id()
-                                + " / 业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
+                                + " / 收到业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         data = ServerContextManage.registerReport(decoderByteFrame, ctx);
                         logger.info("★★★★★★★★★★[注册消息服务器回复]★★★★★★★★★★"
                                 + " / 账户: " + ServerContextManage.getConnectInfoKey(ctx)

@@ -3,6 +3,7 @@ package com.soft.netty.client;
 import com.soft.netty.common.ConnectInfo;
 import com.soft.netty.common.config.Constant;
 import com.soft.netty.client.report.ClientRegisterReport;
+import com.soft.netty.common.util.StringUtil;
 import com.soft.netty.entity.frame.DecoderByteFrame;
 import com.soft.netty.server.ServerContextManage;
 import io.netty.channel.ChannelHandlerContext;
@@ -32,7 +33,10 @@ public class ClientContextManage {
         attribute.set(connectInfo);
         // 改变内存里的连接状态
         Constant.clientConnectInfoMap.put(model.getAccount(), connectInfo);
-        logger.info("[客户端注册事件] / 用户:" + connectInfo.getAccount() + " / 内存状态:加载 / 网络连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[用户注册]★★★★★★★★★★"
+                + " / 账户:" + ClientContextManage.getConnectInfoKey(ctx)
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
     }
 
     public static String getConnectInfoKey(ChannelHandlerContext ctx) {
@@ -42,5 +46,22 @@ public class ClientContextManage {
             return connectInfo.getAccount();
         }
         return null;
+    }
+
+    /**
+     * 关闭
+     */
+    public static boolean close(ChannelHandlerContext ctx) {
+        String key = getConnectInfoKey(ctx);
+        if (StringUtil.isBlank(key)) {
+            return false;
+        }
+        String linkId = ctx.channel().id().toString();
+        logger.info("[准备关闭连接] / 连接ID:" + linkId);
+        ctx.channel().close();
+        logger.info("[连接已关闭] / 连接ID:" + linkId);
+        // 删除内存
+        Constant.clientConnectInfoMap.remove(key);
+        return true;
     }
 }
