@@ -27,7 +27,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             DecoderByteFrame decoderByteFrame = (DecoderByteFrame) msg;
             FrameType frameType = FrameType.getFrameType(decoderByteFrame.getMessageType());
             if (frameType == null) {
-                logger.info("★★★★★★★★★★[未找到命令类型]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
+                logger.info("★★★★★★★★★★[未找到命令类型]★★★★★★★★★★"
+                        + " / 账户: " + ServerContextManage.getConnectInfoKey(ctx)
+                        + " / 连接地址:" + ctx.channel().remoteAddress()
+                        + " / 连接ID:" + ctx.channel().id()
+                        + " / 收到业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                 return;
             }
             try {
@@ -35,17 +39,44 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] data = new byte[0];
                 switch (frameType) {
                     case REGISTER_REPORT -> {
-                        logger.info("★★★★★★★★★★[注册消息]★★★★★★★★★★" + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
+                        logger.info("★★★★★★★★★★[注册消息]★★★★★★★★★★"
+                                + " / 连接地址:" + ctx.channel().remoteAddress()
+                                + " / 连接ID:" + ctx.channel().id()
+                                + " / 业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         data = ServerContextManage.registerReport(decoderByteFrame, ctx);
-                        logger.info("★★★★★★★★★★[注册消息服务器回复]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]" + " / 回复数据长度:" + data.length + " / 回复数据长度:" + ByteUtil.byteArrayToString(data));
+                        logger.info("★★★★★★★★★★[注册消息服务器回复]★★★★★★★★★★"
+                                + " / 账户: " + ServerContextManage.getConnectInfoKey(ctx)
+                                + " / 连接地址:" + ctx.channel().remoteAddress()
+                                + " / 连接ID:" + ctx.channel().id()
+                                + " / 收到业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]"
+                                + " / 回复数据长度:" + data.length
+                                + " / 回复数据:[" + ByteUtil.byteArrayToString(data) + "]"
+                                + " / 回复数据业务字节长度:" + DecoderByteFrame.decoderByteData(data).length
+                                + " / 回复数据业务字节:" + ByteUtil.byteArrayToString(DecoderByteFrame.decoderByteData(data)));
                     }
                     case HEARTBEAT_REPORT -> {
-                        logger.info("★★★★★★★★★★[心跳消息]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
+                        logger.info("★★★★★★★★★★[心跳消息]★★★★★★★★★★"
+                                + " / 账户:" + ServerContextManage.getConnectInfoKey(ctx)
+                                + " / 连接地址:" + ctx.channel().remoteAddress()
+                                + " / 连接ID:" + ctx.channel().id()
+                                + " / 收到业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         data = ServerContextManage.heartbeatReport();
-                        logger.info("★★★★★★★★★★[心跳消息服务器回复]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]" + " / 回复数据长度:" + data.length + " / 回复数据长度:" + ByteUtil.byteArrayToString(data));
+                        logger.info("★★★★★★★★★★[心跳消息服务器回复]★★★★★★★★★★"
+                                + " / 账户:" + ServerContextManage.getConnectInfoKey(ctx)
+                                + " / 连接地址:" + ctx.channel().remoteAddress()
+                                + " / 连接ID:" + ctx.channel().id()
+                                + " / 收到业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]"
+                                + " / 回复数据长度:" + data.length
+                                + " / 回复数据:[" + ByteUtil.byteArrayToString(data) + "]"
+                                + " / 回复数据业务字节长度:" + DecoderByteFrame.decoderByteData(data).length
+                                + " / 回复数据业务字节:" + ByteUtil.byteArrayToString(DecoderByteFrame.decoderByteData(data)));
                     }
                     default -> {
-                        logger.info("★★★★★★★★★★[未知类型数据]★★★★★★★★★★ / 账户: " + ServerContextManage.getConnectInfoKey(ctx) + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
+                        logger.info("★★★★★★★★★★[未知类型数据]★★★★★★★★★★"
+                                + " / 账户:" + ServerContextManage.getConnectInfoKey(ctx)
+                                + " / 连接地址:" + ctx.channel().remoteAddress()
+                                + " / 连接ID:" + ctx.channel().id()
+                                + " / 收到业务数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()));
                         flag = false;
                     }
                 }
@@ -62,13 +93,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
-        logger.info("[Netty连接注册] / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[Netty连接注册]★★★★★★★★★★"
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
         ctx.fireChannelRegistered();
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
-        logger.info("[客户端断开连接 不做操作] / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[客户端断开连接]★★★★★★★★★★"
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
     }
 
     /**
@@ -77,33 +112,45 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        logger.info("[Netty连接上线] / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[Netty连接上线]★★★★★★★★★★"
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
     }
 
     /**
      * 频道不活跃
      * @param ctx ctx
-     * @throws Exception 异常
      */
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        logger.error("[Netty连接下线] / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+    public void channelInactive(ChannelHandlerContext ctx) {
+        logger.info("★★★★★★★★★★[Netty连接下线]★★★★★★★★★★"
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        logger.error("[Netty异常捕获] / 账户: "+ ServerContextManage.getConnectInfoKey(ctx) +" / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[Netty异常捕获]★★★★★★★★★★"
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id()
+                + " / 异常内容:" + cause.getMessage());
     }
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
-        logger.info("[Netty心跳检测] / 账户: "+ ServerContextManage.getConnectInfoKey(ctx) +" / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[Netty心跳检测]★★★★★★★★★★"
+                + " / 账户:" + ServerContextManage.getConnectInfoKey(ctx)
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
         if (evt instanceof IdleStateEvent) {
             IdleState state = ((IdleStateEvent) evt).state();
             if (state.equals(IdleState.READER_IDLE)) {
                 boolean flag = ServerContextManage.close(ctx);
                 if (!flag) {
-                    logger.info("[Netty心跳检测超时后关闭连接失败] / 账户: "+ ServerContextManage.getConnectInfoKey(ctx) +" / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
+                    logger.info("★★★★★★★★★★[Netty心跳检测超时后关闭连接失败]★★★★★★★★★★"
+                            + " / 账户:" + ServerContextManage.getConnectInfoKey(ctx)
+                            + " / 连接地址:" + ctx.channel().remoteAddress()
+                            + " / 连接ID:" + ctx.channel().id());
                 }
             }
         }

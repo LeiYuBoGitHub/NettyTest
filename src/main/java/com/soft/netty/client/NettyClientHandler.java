@@ -45,16 +45,12 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
                 byte[] data = new byte[0];
                 switch (frameType) {
                     case REGISTER_REPLY -> {
-                        logger.info("★★★★★★★★★★收到[注册回复]消息★★★★★★★★★★");
-                        logger.info("[注册]" + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
-                        logger.info("数据:" + ByteUtil.byteArrayToString(decoderByteFrame.getData()));
+                        logger.info("★★★★★★★★★★[注册回复]★★★★★★★★★★" + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         ClientContextManage.registerReport(decoderByteFrame, ctx);
                         flag = false;
                     }
                     case HEARTBEAT_REPLY -> {
-                        logger.info("★★★★★★★★★★收到[心跳回复]消息★★★★★★★★★★");
-                        logger.info("[心跳] / 账户: "+ ClientContextManage.getConnectInfoKey(ctx) +" / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id());
-                        logger.info("数据:" + ByteUtil.byteArrayToString(decoderByteFrame.getData()));
+                        logger.info("★★★★★★★★★★[心跳回复]★★★★★★★★★★" + " / 连接地址:" + ctx.channel().remoteAddress() + " / 连接ID:" + ctx.channel().id() + " / 数据:[" + ByteUtil.byteArrayToString(decoderByteFrame.getData()) + "]");
                         flag = false;
                     }
                     default -> {
@@ -63,8 +59,6 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
                 if (flag) {
-                    logger.info("服务器响应长度:" + data.length);
-                    logger.info("服务器响应字节字符串:" + ByteUtil.byteArrayToString(data));
                     ctx.writeAndFlush(Unpooled.wrappedBuffer(data));
                 }
             } catch (Exception e) {

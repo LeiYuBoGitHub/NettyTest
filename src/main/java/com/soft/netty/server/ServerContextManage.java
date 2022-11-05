@@ -1,7 +1,6 @@
 package com.soft.netty.server;
 
 import com.soft.netty.common.ConnectInfo;
-import com.soft.netty.common.util.ByteUtil;
 import com.soft.netty.common.util.StringUtil;
 import com.soft.netty.entity.FrameType;
 import com.soft.netty.entity.frame.DecoderByteFrame;
@@ -41,11 +40,14 @@ public class ServerContextManage {
         attribute.set(connectInfo);
         // 改变内存里的连接状态
         Constant.serverConnectInfoMap.put(model.getAccount(), connectInfo);
-        logger.info("[用户重新注册事件] / 用户:" + connectInfo.getAccount() + " / 内存状态:加载 / 网络连接ID:" + ctx.channel().id());
+        logger.info("★★★★★★★★★★[用户注册]★★★★★★★★★★"
+                + " / 账户:" + ServerContextManage.getConnectInfoKey(ctx)
+                + " / 连接地址:" + ctx.channel().remoteAddress()
+                + " / 连接ID:" + ctx.channel().id());
         ServerRegisterReply reply = new ServerRegisterReply();
         reply.setAccountLength(model.getAccountLength());
         reply.setAccount(model.getAccount());
-        return request(reply.cover(), FrameType.REGISTER_REPLY);
+        return EncoderByteFrame.encoder(FrameType.REGISTER_REPLY, reply.cover());
     }
 
     /**
@@ -53,7 +55,7 @@ public class ServerContextManage {
      * @return {@link byte[]}
      */
     static byte[] heartbeatReport() {
-        return request(new byte[0], FrameType.HEARTBEAT_REPLY);
+        return EncoderByteFrame.encoder(FrameType.HEARTBEAT_REPLY, new byte[0]);
     }
 
     /**
@@ -80,16 +82,5 @@ public class ServerContextManage {
             return connectInfo.getAccount();
         }
         return null;
-    }
-
-    /**
-     * 请求
-     * @param data      数据
-     * @param frameType 框架式
-     * @return 结果
-     */
-    public static byte[] request(byte[] data, FrameType frameType) {
-        logger.info("业务字节长度:" + data.length + " / 业务字节16进制:[" + ByteUtil.byteArrayToString(data) + "]");
-        return EncoderByteFrame.encoder(frameType, data);
     }
 }
