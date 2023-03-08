@@ -1,6 +1,6 @@
 package com.soft.netty.client.send;
 
-import com.soft.netty.entity.encoder.Encoder;
+import com.soft.netty.entity.encoder.AbstractEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * @date 2022/10/29 0:23
  * @description
  */
-public class ClientRegisterSend extends Encoder {
+public class ClientRegisterSend extends AbstractEncoder {
 
     private String account;
 

@@ -8,6 +8,10 @@ import com.soft.netty.entity.frame.DecoderByteFrame;
  */
 public abstract class AbstractDecoder {
 
+    /**
+     * 转换
+     * @param frame 框架
+     */
     public abstract void cover(DecoderByteFrame frame);
 
 }

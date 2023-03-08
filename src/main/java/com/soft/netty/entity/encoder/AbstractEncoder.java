@@ -5,7 +5,11 @@ package com.soft.netty.entity.encoder;
  * @date 2022/10/31 23:21
  * @description
  */
-public abstract class Encoder {
+public abstract class AbstractEncoder {
 
+    /**
+     * 转换
+     * @return {@link byte[]}
+     */
     public abstract byte[] cover();
 }

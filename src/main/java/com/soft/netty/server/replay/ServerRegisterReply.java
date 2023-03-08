@@ -1,6 +1,6 @@
 package com.soft.netty.server.replay;
 
-import com.soft.netty.entity.encoder.Encoder;
+import com.soft.netty.entity.encoder.AbstractEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * @author 野性的呼唤
  * @date 2022/7/18 17:06
  */
-public class ServerRegisterReply extends Encoder {
+public class ServerRegisterReply extends AbstractEncoder {
 
     private int accountLength;
 
