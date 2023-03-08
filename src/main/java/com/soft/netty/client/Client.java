@@ -37,8 +37,8 @@ public class Client {
             // 连接服务端
             Channel channel = bootstrap.connect(Constant.HOST, Constant.PORT).sync().channel();
             channel.writeAndFlush(Unpooled.wrappedBuffer(ClientRequest.register("soft")));
-            for (int i = 0; i < 2000; i++ ) {
-                Thread.sleep(1000 * 10);
+            for (int i = 0; i < 2; i++ ) {
+                Thread.sleep(1000);
                 channel.writeAndFlush(Unpooled.wrappedBuffer(ClientRequest.heartbeat()));
             }
             channel.closeFuture().sync();

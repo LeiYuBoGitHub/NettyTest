@@ -36,9 +36,8 @@ public class DecoderByte extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
         try {
-            logger.info("☻☻☻☻☻☻☻☻☻☻进入服务器解码器开始分析程序☻☻☻☻☻☻☻☻☻☻");
+            logger.info("☻☻☻☻☻☻☻☻☻☻进入服务器解码器程序☻☻☻☻☻☻☻☻☻☻");
             int length = buffer.readableBytes();
-            logger.info("请求字节总长度:" + length);
             if (length <= 0) {
                 logger.error("请求无字节");
                 return;
@@ -47,7 +46,6 @@ public class DecoderByte extends ByteToMessageDecoder {
             // 标记
             buffer.markReaderIndex();
             byte[] requestByte = readByteArray(buffer, length);
-            logger.info("请求字节字符串:" + ByteUtil.byteArrayToString(requestByte));
             // 还原读指针的位置
             buffer.resetReaderIndex();
 

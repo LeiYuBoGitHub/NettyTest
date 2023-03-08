@@ -20,7 +20,7 @@ class ServerChannelHandler extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel sc) {
         // 心跳检测 300S
-        sc.pipeline().addLast(new IdleStateHandler(Constant.TIME_OUT,0,0, TimeUnit.SECONDS));
+        sc.pipeline().addLast(new IdleStateHandler(0,0,Constant.TIME_OUT, TimeUnit.SECONDS));
         // 解码器
         sc.pipeline().addLast(new DecoderByte());
         // 处理网络IO

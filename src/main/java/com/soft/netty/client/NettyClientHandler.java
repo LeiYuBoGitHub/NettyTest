@@ -23,7 +23,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         try {
-            logger.info("✉✉✉✉✉✉✉✉✉✉服务器收到设备消息✉✉✉✉✉✉✉✉✉✉");
+            logger.info("✉✉✉✉✉✉✉✉✉✉服务器收到账号消息✉✉✉✉✉✉✉✉✉✉");
             DecoderByteFrame decoderByteFrame = (DecoderByteFrame) msg;
             FrameType frameType = FrameType.getFrameType(decoderByteFrame.getMessageType());
             if (frameType == null) {

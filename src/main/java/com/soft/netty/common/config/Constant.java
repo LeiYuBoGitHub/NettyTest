@@ -13,7 +13,7 @@ public class Constant {
 
     public static final String HOST = "127.0.0.1";
 
-    public static final int PORT = 9000;
+    public static final int PORT = 8100;
 
     public static final int TIME_OUT = 300;
 
@@ -29,5 +29,13 @@ public class Constant {
 
     public static Map<String, ConnectInfo> clientConnectInfoMap = new HashMap<>(16);
 
-    public static Map<String, ConnectInfo> serverConnectInfoMap = new HashMap<>(16);
+    /**
+     * 连接信息
+     */
+    public static Map<String, ConnectInfo> CONNECT_INFO_MAP = new HashMap<>(512);
+
+    /**
+     * 连接ID和账号
+     */
+    public static Map<String, String> CHANNEL_ID_AND_ACCOUT_MAP = new HashMap<>(512);
 }
